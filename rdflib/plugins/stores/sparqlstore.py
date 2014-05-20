@@ -199,8 +199,6 @@ class SPARQLStore(NSSPARQLWrapper, Store):
         self.sparql11 = sparql11
         self.context_aware = context_aware
 
-        self.setReturnFormat(JSON)
-
     # Database Management Methods
     def create(self, configuration):
         raise TypeError('The SPARQL store is read only')
@@ -281,6 +279,7 @@ class SPARQLStore(NSSPARQLWrapper, Store):
             self.addDefaultGraph(queryGraph)
         self.setQuery(query)
 
+        self.setReturnFormat(JSON)
         return Result.parse(SPARQLWrapper.query(self).response, format="json")
 
     def triples(self, (s, p, o), context=None):
