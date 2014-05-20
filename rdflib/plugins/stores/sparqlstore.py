@@ -27,7 +27,7 @@ ORDERBY = 'ORDER BY'
 import re
 # import warnings
 try:
-    from SPARQLWrapper import SPARQLWrapper, XML
+    from SPARQLWrapper import SPARQLWrapper, XML, JSON
 except ImportError:
     raise Exception(
         "SPARQLWrapper not found! SPARQL Store will not work." +
@@ -199,6 +199,8 @@ class SPARQLStore(NSSPARQLWrapper, Store):
         self.sparql11 = sparql11
         self.context_aware = context_aware
 
+        self.setReturnFormat(JSON)
+
     # Database Management Methods
     def create(self, configuration):
         raise TypeError('The SPARQL store is read only')
@@ -279,7 +281,7 @@ class SPARQLStore(NSSPARQLWrapper, Store):
             self.addDefaultGraph(queryGraph)
         self.setQuery(query)
 
-        return Result.parse(SPARQLWrapper.query(self).response)
+        return Result.parse(SPARQLWrapper.query(self).response, format="json")
 
     def triples(self, (s, p, o), context=None):
         """
