@@ -681,7 +681,8 @@ class SPARQLUpdateStore(SPARQLStore):
     def _do_update(self, update):
         import urllib
         if self.postAsEncoded:
-            update = urllib.urlencode({'update': update.encode("utf-8")})
+            # NOTE: using query variable because of a bug in virtuoso
+            update = urllib.urlencode({'query': update.encode("utf-8")})
         self.connection.request(
             'POST', self.path, update.encode("utf-8"), self.headers)
         return self.connection.getresponse()
